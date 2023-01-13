@@ -27,6 +27,7 @@ public class SignupController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Signup createSignup(@RequestBody Signup signup) {
+		
 		return  service.addSignup(signup);
 	}
 	
