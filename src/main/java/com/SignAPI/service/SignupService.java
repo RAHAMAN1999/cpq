@@ -1,5 +1,7 @@
 package com.SignAPI.service;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,11 +21,19 @@ public class SignupService {
 	//create 
 	public Signup addSignup(Signup signup) {
 		signup.setSignId(UUID.randomUUID().toString());
+		try {
+			String encPwd=Base64.getEncoder().encodeToString(signup.getPassword().getBytes("UTF-8"));
+			signup.setPassword(encPwd);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		return repository.save(signup);
 	}
 	
 	public List<Signup> findAllSignup(){
-		return repository.findAll();
+		List<Signup> signups= repository.findAll();
+		signups.stream().forEach(si->si.setPassword(getDecodedString(si.getPassword())));
+		return signups;
 	}
 	
 	public Signup getSignupBySignupId(String signid) {
@@ -56,7 +66,15 @@ public class SignupService {
 	}
 
 	
-	
+	public String getDecodedString(String encodedValue) {
+		try {
+			return new String(Base64.getDecoder().decode(encodedValue.getBytes("UTF-8")));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	
 	

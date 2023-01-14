@@ -32,7 +32,7 @@ public class SignupController {
 	}
 	
 	@GetMapping
-	public List<Signup> getSignup(){
+	public List<Signup> getSignup() throws Exception{
 		return service.findAllSignup();
 	}
 	@GetMapping("/{signupId}")
